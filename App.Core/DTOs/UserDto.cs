@@ -14,5 +14,7 @@ namespace App.Core.DTOs
         public string LastName { get; set; } = null!;
         public int RoleId { get; set; }
         public bool Enabled { get; set; }
+
+        public string Password { get; set; }
     }
 }
