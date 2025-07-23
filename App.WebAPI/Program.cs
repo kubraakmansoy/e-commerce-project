@@ -1,3 +1,8 @@
+using App.Core.Interfaces;
+using App.Data.Contexts;
+using App.Service;
+using App.Service.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace App.WebAPI
 {
@@ -6,6 +11,12 @@ namespace App.WebAPI
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Services.AddScoped<IUserService, UserService>();
+
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
             // Add services to the container.
 
