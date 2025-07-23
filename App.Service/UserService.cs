@@ -10,7 +10,7 @@ using App.Data.Contexts;
 using App.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace App.Service
+namespace App.Service.Services
 {
     public class UserService : IUserService
     {
