@@ -12,9 +12,13 @@ namespace App.Data
         public AppDbContext CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
-            optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=KM105Db;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer("Server=DESKTOP-LCRB378\\SQLEXPRESS;Database=KM105Db;Trusted_Connection=True;TrustServerCertificate=True;");
+
+
 
             return new AppDbContext(optionsBuilder.Options);
         }
     }
 }
+
+

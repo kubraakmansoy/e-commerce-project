@@ -60,7 +60,8 @@ namespace App.Service.Services
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
                 RoleId = dto.RoleId,
-                Enabled = dto.Enabled
+                Enabled = dto.Enabled,
+                Password = dto.Password
             };
 
             _context.Users.Add(user);
