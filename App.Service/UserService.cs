@@ -4,11 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 using App.Core.DTOs;
 using App.Core.Interfaces;
 using App.Data.Contexts;
 using App.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+
+using static BCrypt.Net.BCrypt;
+
 
 namespace App.Service.Services
 {
@@ -61,7 +65,9 @@ namespace App.Service.Services
                 LastName = dto.LastName,
                 RoleId = dto.RoleId,
                 Enabled = dto.Enabled,
-                Password = dto.Password
+                Password = HashPassword(dto.Password)
+
+
             };
 
             _context.Users.Add(user);
