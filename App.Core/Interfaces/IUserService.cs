@@ -14,6 +14,9 @@ namespace App.Core.Interfaces
         Task<UserDto> CreateAsync(UserDto user);
         Task<bool> UpdateAsync(int id, UserDto user);
         Task<bool> DeleteAsync(int id);
+
+        // 🔐 Login ekleniyor
+        Task<UserDto?> LoginAsync(LoginDto dto);
     }
 }
 
