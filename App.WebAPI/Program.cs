@@ -1,3 +1,8 @@
+using App.Core.Interfaces;
+using App.Data.Contexts;
+using App.Service;
+using App.Service.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace App.WebAPI
 {
@@ -7,12 +12,29 @@ namespace App.WebAPI
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            builder.Services.AddScoped<IUserService, UserService>();
+
+            builder.Services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+
             // Add services to the container.
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
+
 
             var app = builder.Build();
 
@@ -23,6 +45,8 @@ namespace App.WebAPI
                 app.UseSwaggerUI();
             }
 
+
+            app.UseCors();
             app.UseHttpsRedirection();
 
             app.UseAuthorization();

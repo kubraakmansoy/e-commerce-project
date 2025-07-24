@@ -4,13 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 using App.Core.DTOs;
 using App.Core.Interfaces;
 using App.Data.Contexts;
 using App.Data.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace App.Service
+using static BCrypt.Net.BCrypt;
+
+
+namespace App.Service.Services
 {
     public class UserService : IUserService
     {
@@ -60,7 +64,10 @@ namespace App.Service
                 FirstName = dto.FirstName,
                 LastName = dto.LastName,
                 RoleId = dto.RoleId,
-                Enabled = dto.Enabled
+                Enabled = dto.Enabled,
+                Password = HashPassword(dto.Password)
+
+
             };
 
             _context.Users.Add(user);
@@ -94,5 +101,26 @@ namespace App.Service
             await _context.SaveChangesAsync();
             return true;
         }
+
+
+        public async Task<UserDto?> LoginAsync(LoginDto dto)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
+            if (user == null) return null;
+
+            bool isPasswordValid = Verify(dto.Password, user.Password);
+            if (!isPasswordValid) return null;
+
+            return new UserDto
+            {
+                Id = user.Id,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                RoleId = user.RoleId,
+                Enabled = user.Enabled
+            };
+        }
+
     }
 }
