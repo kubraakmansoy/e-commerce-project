@@ -101,5 +101,26 @@ namespace App.Service.Services
             await _context.SaveChangesAsync();
             return true;
         }
+
+
+        public async Task<UserDto?> LoginAsync(LoginDto dto)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
+            if (user == null) return null;
+
+            bool isPasswordValid = Verify(dto.Password, user.Password);
+            if (!isPasswordValid) return null;
+
+            return new UserDto
+            {
+                Id = user.Id,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                RoleId = user.RoleId,
+                Enabled = user.Enabled
+            };
+        }
+
     }
 }
