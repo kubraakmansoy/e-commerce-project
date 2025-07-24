@@ -10,6 +10,7 @@ using App.Core.Interfaces;
 using App.Data.Contexts;
 using App.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using App.Core.Interfaces;
 
 using static BCrypt.Net.BCrypt;
 
@@ -19,6 +20,13 @@ namespace App.Service.Services
     public class UserService : IUserService
     {
         private readonly AppDbContext _context;
+        private readonly ITokenService _tokenService;
+
+        public UserService(AppDbContext context, ITokenService tokenService)
+        {
+            _context = context;
+            _tokenService = tokenService;
+        }
 
         public UserService(AppDbContext context)
         {
@@ -110,6 +118,7 @@ namespace App.Service.Services
 
             bool isPasswordValid = Verify(dto.Password, user.Password);
             if (!isPasswordValid) return null;
+            var token = _tokenService.GenerateToken(user);
 
             return new UserDto
             {
@@ -118,7 +127,8 @@ namespace App.Service.Services
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 RoleId = user.RoleId,
-                Enabled = user.Enabled
+                Enabled = user.Enabled,
+                Token = token
             };
         }
 

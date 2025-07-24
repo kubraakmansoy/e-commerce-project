@@ -3,6 +3,8 @@ using App.Data.Contexts;
 using App.Service;
 using App.Service.Services;
 using Microsoft.EntityFrameworkCore;
+using App.Core.Settings;
+
 
 namespace App.WebAPI
 {

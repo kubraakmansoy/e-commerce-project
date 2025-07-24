@@ -4,13 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using App.Core.DTOs;
+using App.Data.Entities;
+
+
 
 
 namespace App.Core.Interfaces
 {
     public interface ITokenService
     {
-        string CreateToken(UserDto user);
+        
+        string GenerateToken(User user);
+
     }
 }
+
 
