@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace App.WebAPI.Settings
+namespace App.Core.Settings
 {
     public class JwtSettings
     {
