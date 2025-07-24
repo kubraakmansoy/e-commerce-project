@@ -43,6 +43,17 @@ namespace App.WebAPI.Controllers
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDto dto)
+        {
+            var user = await _userService.LoginAsync(dto);
+            if (user == null)
+                return Unauthorized("Email or password is incorrect.");
+
+            return Ok(user); 
+        }
+
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, UserDto user)
         {
