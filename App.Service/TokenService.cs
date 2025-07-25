@@ -24,15 +24,15 @@ namespace App.Service.Services
         {
             _jwtSettings = jwtSettings.Value;
         }
-
         public string GenerateToken(User user)
         {
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.Role, user.RoleId.ToString())
-            };
+        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+        new Claim(ClaimTypes.Name, user.FirstName + " " + user.LastName),
+        new Claim(ClaimTypes.Email, user.Email),
+        new Claim(ClaimTypes.Role, user.RoleId.ToString())
+    };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.SecretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -47,6 +47,7 @@ namespace App.Service.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+        
     }
 }
 

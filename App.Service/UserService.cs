@@ -28,10 +28,7 @@ namespace App.Service.Services
             _tokenService = tokenService;
         }
 
-        public UserService(AppDbContext context)
-        {
-            _context = context;
-        }
+       
 
         public async Task<IEnumerable<UserDto>> GetAllAsync()
         {
