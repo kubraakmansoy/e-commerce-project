@@ -82,7 +82,7 @@ namespace App.WebAPI.Controllers
         public IActionResult GetProfile()
         {
             var email = User.FindFirstValue(ClaimTypes.Email); // veya ClaimTypes.Name
-            return Ok(new { Message = "Yetkili erişim başarılı!", Email = email });
+            return Ok(new { Message = "Authorized access successful!!", Email = email });
         }
 
     }
