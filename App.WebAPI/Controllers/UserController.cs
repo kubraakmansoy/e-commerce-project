@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using App.Core.Interfaces;
 using App.Core.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+
 
 namespace App.WebAPI.Controllers
 {
@@ -73,5 +76,14 @@ namespace App.WebAPI.Controllers
 
             return NoContent();
         }
+
+        [HttpGet("profile")]
+        [Authorize]
+        public IActionResult GetProfile()
+        {
+            var email = User.FindFirstValue(ClaimTypes.Email); // veya ClaimTypes.Name
+            return Ok(new { Message = "Authorized access successful!!", Email = email });
+        }
+
     }
 }
