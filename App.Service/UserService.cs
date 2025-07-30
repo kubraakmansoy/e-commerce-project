@@ -4,22 +4,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 using App.Core.DTOs;
 using App.Core.Interfaces;
 using App.Data.Contexts;
 using App.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using App.Core.Interfaces;
+
+using static BCrypt.Net.BCrypt;
+
 
 namespace App.Service.Services
 {
     public class UserService : IUserService
     {
         private readonly AppDbContext _context;
+        private readonly ITokenService _tokenService;
 
-        public UserService(AppDbContext context)
+        public UserService(AppDbContext context, ITokenService tokenService)
         {
             _context = context;
+            _tokenService = tokenService;
         }
+
+       
 
         public async Task<IEnumerable<UserDto>> GetAllAsync()
         {
@@ -61,7 +70,9 @@ namespace App.Service.Services
                 LastName = dto.LastName,
                 RoleId = dto.RoleId,
                 Enabled = dto.Enabled,
-                Password = dto.Password
+                Password = HashPassword(dto.Password)
+
+
             };
 
             _context.Users.Add(user);
@@ -95,5 +106,33 @@ namespace App.Service.Services
             await _context.SaveChangesAsync();
             return true;
         }
+
+
+        public async Task<UserDto?> LoginAsync(LoginDto dto)
+        {
+            var user = await _context.Users
+                .Include(u => u.Role) 
+                .FirstOrDefaultAsync(u => u.Email == dto.Email);
+
+            if (user == null) return null;
+
+            bool isPasswordValid = Verify(dto.Password, user.Password);
+            if (!isPasswordValid) return null;
+
+            var token = _tokenService.GenerateToken(user);
+
+            return new UserDto
+            {
+                Id = user.Id,
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                RoleId = user.RoleId,
+                Enabled = user.Enabled,
+                Token = token
+            };
+        }
+
     }
+
 }

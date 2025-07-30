@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using App.Core.Interfaces;
 using App.Core.DTOs;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+
 
 namespace App.WebAPI.Controllers
 {
@@ -43,6 +46,17 @@ namespace App.WebAPI.Controllers
             return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
         }
 
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginDto dto)
+        {
+            var user = await _userService.LoginAsync(dto);
+            if (user == null)
+                return Unauthorized("Email or password is incorrect.");
+
+            return Ok(user); 
+        }
+
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, UserDto user)
         {
@@ -62,5 +76,14 @@ namespace App.WebAPI.Controllers
 
             return NoContent();
         }
+
+        [HttpGet("profile")]
+        [Authorize]
+        public IActionResult GetProfile()
+        {
+            var email = User.FindFirstValue(ClaimTypes.Email); // veya ClaimTypes.Name
+            return Ok(new { Message = "Authorized access successful!!", Email = email });
+        }
+
     }
 }
