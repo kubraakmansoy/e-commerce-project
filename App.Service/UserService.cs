@@ -110,11 +110,15 @@ namespace App.Service.Services
 
         public async Task<UserDto?> LoginAsync(LoginDto dto)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
+            var user = await _context.Users
+                .Include(u => u.Role) 
+                .FirstOrDefaultAsync(u => u.Email == dto.Email);
+
             if (user == null) return null;
 
             bool isPasswordValid = Verify(dto.Password, user.Password);
             if (!isPasswordValid) return null;
+
             var token = _tokenService.GenerateToken(user);
 
             return new UserDto
@@ -130,4 +134,5 @@ namespace App.Service.Services
         }
 
     }
+
 }
