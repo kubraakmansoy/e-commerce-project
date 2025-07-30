@@ -59,11 +59,21 @@ namespace App.Service.Services
 
         public async Task<OrderDto> CreateAsync(OrderDto dto)
         {
+            // İlgili ürün bilgilerini getir
+            var product = await _context.Products.FindAsync(dto.ProductId);
+            if (product == null || !product.Enabled)
+                throw new Exception("Ürün bulunamadı veya pasif.");
+
+            // Toplam tutarı hesapla
+            var total = product.Price * dto.Quantity;
+
             var order = new Order
             {
                 UserId = dto.UserId,
-                OrderDate = dto.OrderDate,
-                TotalAmount = dto.TotalAmount,
+                ProductId = dto.ProductId,
+                Quantity = dto.Quantity,
+                OrderDate = DateTime.UtcNow,
+                TotalAmount = total,
                 Notes = dto.Notes,
                 IsPaid = dto.IsPaid,
                 Enabled = true
@@ -73,9 +83,13 @@ namespace App.Service.Services
             await _context.SaveChangesAsync();
 
             dto.Id = order.Id;
+            dto.TotalAmount = total;
+            dto.OrderDate = order.OrderDate;
             dto.CreatedAt = order.CreatedAt;
+
             return dto;
         }
+        
 
         public async Task<bool> UpdateAsync(int id, OrderDto dto)
         {
