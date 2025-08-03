@@ -13,5 +13,11 @@ namespace App.Data.Entities
         public byte StockAmount { get; set; }
         public bool Enabled { get; set; } = true;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        // Navigation properties = foreign key .
+
+        public Seller Seller { get; set; } = null!;
+        public Category Category { get; set; } = null!;
+
     }
 }
