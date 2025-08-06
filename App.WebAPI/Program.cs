@@ -19,6 +19,8 @@ namespace App.WebAPI
             // Dependency Injection
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
+            builder.Services.AddScoped<IProductService, ProductService>();
+
 
             // DbContext
             builder.Services.AddDbContext<AppDbContext>(options =>
