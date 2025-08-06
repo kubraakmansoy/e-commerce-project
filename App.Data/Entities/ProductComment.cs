@@ -3,29 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using App.Data.Entities;
 
 using System;
 
 namespace App.Data.Entities
 {
-    public class Order
+    public class ProductComment
     {
         public int Id { get; set; }
 
-        // Foreign key
+        // Foreign Keys
+        public int ProductId { get; set; }
         public int UserId { get; set; }
 
-        public string OrderCode { get; set; } = null!;
-
-        public string Address { get; set; } = null!;
-
+        // Properties
+        public string Text { get; set; } = null!;
+        public byte StarCount { get; set; } // 1–5
+        public bool IsConfirmed { get; set; } = false;
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        // Navigation properties
+        // Navigation Properties
+        public Product Product { get; set; } = null!;
         public User User { get; set; } = null!;
-
-        public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     }
 }
 

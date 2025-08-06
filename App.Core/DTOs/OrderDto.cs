@@ -12,20 +12,12 @@ namespace App.Core.DTOs
 
         public int UserId { get; set; }
 
-        public int ProductId { get; set; }
-        public int Quantity { get; set; }
+        public string OrderCode { get; set; } = null!;
 
-        public DateTime OrderDate { get; set; }
-
-        public decimal TotalAmount { get; set; }
-
-        public string? Notes { get; set; }
-
-        public bool IsPaid { get; set; }
-
-        public bool Enabled { get; set; }
+        public string Address { get; set; } = null!;
 
         public DateTime CreatedAt { get; set; }
     }
 }
+
 

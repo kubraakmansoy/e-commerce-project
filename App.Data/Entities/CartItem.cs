@@ -3,29 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using App.Data.Entities;
 
 using System;
 
 namespace App.Data.Entities
 {
-    public class Order
+    public class CartItem
     {
         public int Id { get; set; }
 
-        // Foreign key
+        // Foreign Keys
         public int UserId { get; set; }
+        public int ProductId { get; set; }
 
-        public string OrderCode { get; set; } = null!;
-
-        public string Address { get; set; } = null!;
-
+        // Properties
+        public byte Quantity { get; set; } // min:1
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        // Navigation properties
+        // Navigation Properties
         public User User { get; set; } = null!;
-
-        public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+        public Product Product { get; set; } = null!;
     }
+
+
+
+
+
+
 }
 
