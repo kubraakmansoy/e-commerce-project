@@ -13,19 +13,19 @@ namespace App.Data.Entities
     {
         public int Id { get; set; }
 
+        // Foreign key
         public int UserId { get; set; }
 
-        public DateTime OrderDate { get; set; } = DateTime.UtcNow;
+        public string OrderCode { get; set; } = null!;
 
-        public decimal TotalAmount { get; set; }
-
-        public string? Notes { get; set; }
-
-        public bool IsPaid { get; set; } = false;
-
-        public bool Enabled { get; set; } = true;
+        public string Address { get; set; } = null!;
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        // Navigation properties
+        public User User { get; set; } = null!;
+
+        public ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     }
 }
 

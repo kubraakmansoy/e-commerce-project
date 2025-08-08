@@ -1,7 +1,8 @@
-﻿using System;
+﻿
+using System.Text;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using App.Core.DTOs;
 using App.Core.Interfaces;
@@ -23,16 +24,12 @@ namespace App.Service.Services
         public async Task<IEnumerable<OrderDto>> GetAllAsync()
         {
             return await _context.Orders
-                .Where(o => o.Enabled)
                 .Select(o => new OrderDto
                 {
                     Id = o.Id,
                     UserId = o.UserId,
-                    OrderDate = o.OrderDate,
-                    TotalAmount = o.TotalAmount,
-                    Notes = o.Notes,
-                    IsPaid = o.IsPaid,
-                    Enabled = o.Enabled,
+                    OrderCode = o.OrderCode,
+                    Address = o.Address,
                     CreatedAt = o.CreatedAt
                 })
                 .ToListAsync();
@@ -41,18 +38,15 @@ namespace App.Service.Services
         public async Task<OrderDto?> GetByIdAsync(int id)
         {
             var order = await _context.Orders.FindAsync(id);
-            if (order == null || !order.Enabled)
+            if (order == null)
                 return null;
 
             return new OrderDto
             {
                 Id = order.Id,
                 UserId = order.UserId,
-                OrderDate = order.OrderDate,
-                TotalAmount = order.TotalAmount,
-                Notes = order.Notes,
-                IsPaid = order.IsPaid,
-                Enabled = order.Enabled,
+                OrderCode = order.OrderCode,
+                Address = order.Address,
                 CreatedAt = order.CreatedAt
             };
         }
@@ -62,11 +56,9 @@ namespace App.Service.Services
             var order = new Order
             {
                 UserId = dto.UserId,
-                OrderDate = dto.OrderDate,
-                TotalAmount = dto.TotalAmount,
-                Notes = dto.Notes,
-                IsPaid = dto.IsPaid,
-                Enabled = true
+                OrderCode = dto.OrderCode,
+                Address = dto.Address,
+                CreatedAt = DateTime.UtcNow
             };
 
             _context.Orders.Add(order);
@@ -74,20 +66,19 @@ namespace App.Service.Services
 
             dto.Id = order.Id;
             dto.CreatedAt = order.CreatedAt;
+
             return dto;
         }
 
         public async Task<bool> UpdateAsync(int id, OrderDto dto)
         {
             var order = await _context.Orders.FindAsync(id);
-            if (order == null || !order.Enabled)
+            if (order == null)
                 return false;
 
             order.UserId = dto.UserId;
-            order.OrderDate = dto.OrderDate;
-            order.TotalAmount = dto.TotalAmount;
-            order.Notes = dto.Notes;
-            order.IsPaid = dto.IsPaid;
+            order.OrderCode = dto.OrderCode;
+            order.Address = dto.Address;
 
             await _context.SaveChangesAsync();
             return true;
@@ -96,12 +87,13 @@ namespace App.Service.Services
         public async Task<bool> DeleteAsync(int id)
         {
             var order = await _context.Orders.FindAsync(id);
-            if (order == null || !order.Enabled)
+            if (order == null)
                 return false;
 
-            order.Enabled = false;
+            _context.Orders.Remove(order);
             await _context.SaveChangesAsync();
             return true;
         }
     }
 }
+
