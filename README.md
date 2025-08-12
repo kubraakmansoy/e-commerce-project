@@ -6,7 +6,10 @@ This is a layered ASP.NET Core e-commerce project built with a clean architectur
  Project Structure
 
 *bash
-App.Core       Models, DTOs, Interfaces \n
+App.Core       Models, DTOs, Interfaces 
+
 App.Data       Entity Framework Core context and migrations
+
 App.Service    Business logic layer (services)
+
 App.WebAPI     API controllers and endpoints  
