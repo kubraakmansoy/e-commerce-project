@@ -6,6 +6,15 @@ namespace App.WebUI
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            var apiBaseUrl = builder.Configuration["Apis:Data"];
+            if (string.IsNullOrWhiteSpace(apiBaseUrl))
+                throw new InvalidOperationException("Apis:Data ayarý bulunamadý. appsettings.Development.json'a ekleyin.");
+
+            // 2) Named HttpClient ekle
+            builder.Services.AddHttpClient("api", client =>
+            {
+                client.BaseAddress = new Uri(apiBaseUrl); // ör: http://localhost:5028/
+            });
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
@@ -34,3 +43,6 @@ namespace App.WebUI
         }
     }
 }
+
+
+
