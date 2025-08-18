@@ -38,5 +38,29 @@ namespace App.WebUI.Controllers
 
             return View(models);
         }
+
+        public async Task<IActionResult> Details(int id)
+        {
+            // API: GET api/product/{id}
+            var dto = await _api.GetFromJsonAsync<ProductDto>($"api/product/{id}");
+            if (dto is null) return NotFound();
+
+            var model = new ProductViewModel
+            {
+                Id = dto.Id,
+                Name = dto.Name,
+                Price = dto.Price,
+                Details = dto.Details,
+                StockAmount = dto.StockAmount,
+                Enabled = dto.Enabled
+            };
+
+            return View(model);
+        }
+
+
+
+
+
     }
 }
