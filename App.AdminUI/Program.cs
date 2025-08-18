@@ -6,6 +6,16 @@ namespace App.AdminUI
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            // API base url
+            var apiBaseUrl = builder.Configuration["Apis:Data"]
+                ?? throw new InvalidOperationException("Apis:Data missing");
+
+            // Named HttpClient
+            builder.Services.AddHttpClient("api", c => c.BaseAddress = new Uri(apiBaseUrl));
+
+            // (Ýleride kimlik doðrulama ekleyeceðiz)
+
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
